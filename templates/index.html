@@ -1,0 +1,88 @@
+{%with messages = get_flashed_messages()%}
+{%if messages %}
+<script type="text/javascript"> // flask에서 flash를 임포트하여 메시지를 작성해주면 이 코드를 통해 팝업창을 띄울 수 있습니다.
+    alert("{{messages[-1]}}");
+</script>
+{%endif%}
+{%endwith%}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Title</title>
+
+    <style>
+        ul{
+            display: table;
+            list-style:none;
+            padding-left:0px;
+            display:table;
+            width: 100%;
+            vertical-align: middle;
+            margin: 0 auto
+        }
+        li{
+            display: table-cell;
+            width: 100%;
+        }
+        .login_box{
+            width:300px;
+            margin:auto
+        }
+        .wrap{
+            width:800px;
+            margin:auto
+        }
+        form label.sign{
+            width: 90px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <ul>
+        {% if session.get('logFlag') %}
+            <li> User ID : {{session['userID']}}</li>
+            <li style="padding-right: 5px"><form><input type="submit" value="Edit"></form></li>
+            <li><form action="/logout" method="post"><input type="submit" value="Sign Out"></form></li>
+        {% else %}
+            <li> 로그인을 해주세요. </li>
+            <li></li>
+            <li><form action="/sign_up" method="post"><input type="submit" value="Sign Up"></form></li>
+        {% endif %}
+    </ul>
+
+    <hr><br>
+
+    <div class="login_box">
+        <fieldset style="height: 110px"> <!--아래의 코드는 html에서 flask의 코드를 작성한 것입니다.-->
+            <legend style="text-align: center">Login</legend>
+                {% if session.get('logFlag') %}
+                    <form action="/logout" method="post">
+                        Welcome, "{{session['userID']}}"!<br>
+                        Click members only!
+                        <hr>
+                        <input style="text-align:center; display:block; margin: 0 auto;" type="submit" value="Sign Out">
+                    </form>
+                {% else %}
+                    <form action="/login" method="post">
+                        <label class="sign" for="id">ID : </label><input id="id" name="id" type="text"><br>
+                        <label class="sign" for="pwd">Password : </label></td><td><input id="pwd" name="password" type="password">
+                        <hr>
+                        <input style="text-align:center; display:block; margin: 0 auto;" type="submit" value="Sign in">
+                    </form>
+                {% endif %}
+        </fieldset>
+    </div>
+    <br><hr>
+    <div style="text-align: center; margin-top: 10px">Click bellow!</div>
+    <form action="/member" method="GET">
+    <input style="display:block; margin: 0 auto; margin-top: 10px" type="submit" value="Members only">
+    </form>
+</div>
+
+</body>
+</html>
